@@ -3,13 +3,23 @@ package com.lbg.project.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.GsonBuilder
+import com.lbg.project.data.database.LBGDatabase
+import com.lbg.project.data.repositories.CatDetailsRepositoryImpl
+import com.lbg.project.data.repositories.CatsRepositoryImpl
 import com.lbg.project.data.services.CatsService
+import com.lbg.project.domain.repositories.CatDetailsRepository
+import com.lbg.project.domain.repositories.CatsRepository
+import com.lbg.project.domain.usecase.CheckFavouriteUseCase
+import com.lbg.project.domain.usecase.DeleteFavCatUseCase
+import com.lbg.project.domain.usecase.GetCatsUseCase
+import com.lbg.project.domain.usecase.GetFavCatsUseCase
+import com.lbg.project.domain.usecase.PostFavCatUseCase
 import com.lbg.project.network.interceptor.HeaderInterceptor
 import com.lbg.project.network.interceptor.NetworkConnectionInterceptor
-import com.lbg.project.repo.CatsRepository
+import com.lbg.project.presentation.ui.features.catDetails.viewModel.CatsDetailsViewModel
+import com.lbg.project.presentation.ui.features.cats.viewModel.CatsViewModel
 import com.lbg.project.utils.Constants
-import com.lbg.project.viewModel.MainViewModel
-import com.google.gson.GsonBuilder
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -48,13 +58,23 @@ private val persistence = module {
     }
 }
 private val viewModelModule = module {
-    viewModel { MainViewModel(get()) }
+    viewModel { CatsViewModel(get(),get()) }
+    viewModel { CatsDetailsViewModel(get(),get(),get()) }
 
 }
 private val repoModule = module {
-    single { CatsRepository(get()) }
+    single<CatsRepository> { CatsRepositoryImpl(get(),get()) }
+    single<CatDetailsRepository> { CatDetailsRepositoryImpl(get(),get()) }
 
 }
+private val useCaseModule = module {
+    single { GetCatsUseCase(get()) }
+    single { GetFavCatsUseCase(get()) }
+    single { PostFavCatUseCase(get()) }
+    single { CheckFavouriteUseCase(get()) }
+    single { DeleteFavCatUseCase(get()) }
+}
+
 const val url = "CatUrl"
 private val serviceModule = module {
     single { provideOkHttpClient(androidContext()) }
@@ -72,7 +92,14 @@ private val serviceModule = module {
 private val dispatchModule = module {
     single(named("io")) { Dispatchers.IO }
     single(named("main")) { Dispatchers.Main }
+    single(named("default")) { Dispatchers.Default }
 }
+
+private val databaseModule = module {
+    single { LBGDatabase.getInstance(androidContext()) }
+    single { get<LBGDatabase>().favImageDao() }
+}
+
 val nullOnEmptyConverterFactory = object : Converter.Factory() {
     fun converterFactory() = this
     override fun responseBodyConverter(
@@ -104,10 +131,12 @@ private fun provideOkHttpClient(context: Context): OkHttpClient {
 
 //Add module to allModules for use
 val allModules = listOf(
-    repoModule,
     viewModelModule,
     persistence,
     dispatchModule,
     gsonModule,
-    serviceModule
+    serviceModule,
+    repoModule,
+    useCaseModule,
+    databaseModule
 )

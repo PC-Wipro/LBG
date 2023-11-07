@@ -20,7 +20,7 @@ class HeaderInterceptor : Interceptor {
             mutableHeaders["Content-Type"] = "application/json"
         }
 
-        if (!mutableHeaders.containsKey("Content-Type")) {
+        if (!mutableHeaders.containsKey("x-api-key")) {
             mutableHeaders["x-api-key"] = "DEMO-API-KEY"
         }
 
