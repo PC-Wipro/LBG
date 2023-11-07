@@ -20,12 +20,12 @@
   
 
 ## Table of Contents
-* [About the Project](#about-the-project)https://github.com/PC-Wipro/LBG/new/master?readme=1#about-the-project
+* [About the Project](#about-the-project)
 * [Architecture](#architecture)
 * [Tech stack](#tech-stacks)
 * [Features](#features)
 * [Unit Testing](#unit-testing)
-* [Environment Setup](#requirements)
+* [Environment Setup](#environment-setup)
 * [Commits Includes](#commits-includes)
 
 # About the Project
