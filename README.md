@@ -193,14 +193,14 @@ Mockito is used for unit testing the API and network-related components. It allo
   - Android Studio's Gradle JDK version should be Java 17.0.6.
     
 ### Commits Includes
-##### Commit 03526cafbe0ffcbe4df87f9c91d0c3512c8bac71
+#### Commit 03526cafbe0ffcbe4df87f9c91d0c3512c8bac71
 This commit introduces the following major changes:
 
 **Dependency Injection (DI) Implementation:** The commit includes the implementation of Dependency Injection. This architectural pattern is essential for providing objects with their dependencies, improving code modularity and testability.
 
 **Basic MVVM Project Architecture:** The commit lays the foundation for the MVVM (Model-View-ViewModel) architecture. This separation of concerns is crucial for building maintainable and scalable applications.
 
-##### Commit c66c4dae69ba5fbc18bf793ff11b5b54e6cc504d
+#### Commit c66c4dae69ba5fbc18bf793ff11b5b54e6cc504d
 This commit encompasses significant improvements and features, including:
 
 **MVVM Clean Architecture:** The project now adheres to the MVVM Clean Architecture. This architectural style emphasizes the separation of data, domain logic, and presentation concerns, resulting in code that is clean and maintainable.
