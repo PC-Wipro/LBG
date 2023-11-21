@@ -1,6 +1,6 @@
 package com.lbg.project.presentation.contracts
 
-import com.lbg.project.data.models.mappers.CatDataModel
+import com.lbg.project.domain.mappers.CatDataModel
 
 class CatContract  {
     data class State(

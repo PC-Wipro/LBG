@@ -1,12 +1,12 @@
 package com.lbg.project.lbgTest.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.lbg.project.catsMock.MockPostFavCatModel
+import com.lbg.project.catsMock.MockSuccessResponse
+import com.lbg.project.catsMock.toRequestPostFavCatData
+import com.lbg.project.catsMock.toResponsePostSuccess
 import com.lbg.project.data.database.LBGDatabase
 import com.lbg.project.data.models.SuccessResponse
-import com.lbg.project.data.models.catsMock.MockPostFavCatModel
-import com.lbg.project.data.models.catsMock.MockSuccessResponse
-import com.lbg.project.data.models.catsMock.toRequestPostFavCatData
-import com.lbg.project.data.models.catsMock.toResponsePostSuccess
 import com.lbg.project.data.repositories.CatsRepositoryImpl
 import com.lbg.project.data.services.CatsService
 import com.lbg.project.domain.usecase.GetCatsUseCase

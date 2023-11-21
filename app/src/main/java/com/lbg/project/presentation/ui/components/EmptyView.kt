@@ -36,7 +36,7 @@ fun EmptyView(message:String) {
                     modifier = Modifier,
                     restartOnPlay = true,
                     alignment = Alignment.Center,
-                    iterations = 100,
+                    iterations = 54,
                 )
                 Text(
                     text = message,

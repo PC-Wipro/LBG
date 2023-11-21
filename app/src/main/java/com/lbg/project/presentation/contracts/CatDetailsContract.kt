@@ -1,7 +1,7 @@
 package com.lbg.project.presentation.contracts
 
 
-import com.lbg.project.data.models.mappers.CallSuccessModel
+import com.lbg.project.domain.mappers.CallSuccessModel
 
 
 class CatDetailsContract {

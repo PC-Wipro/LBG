@@ -63,7 +63,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lbg.project.R
-import com.lbg.project.data.models.mappers.CatDataModel
+import com.lbg.project.domain.mappers.CatDataModel
 import com.lbg.project.presentation.contracts.BaseContract
 import com.lbg.project.presentation.contracts.CatContract
 import com.lbg.project.presentation.ui.components.EmptyView

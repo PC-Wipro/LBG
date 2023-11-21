@@ -11,11 +11,11 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.lbg.project.data.models.catsMock.MockFavouriteCatsResponse
-import com.lbg.project.data.models.catsMock.MocksCatsDataModel
-import com.lbg.project.data.models.catsMock.toResponseCats
-import com.lbg.project.data.models.catsMock.toResponseFavCats
-import com.lbg.project.data.models.mappers.CatDataModel
+import com.lbg.project.domain.mappers.CatDataModel
+import com.lbg.project.models.MockFavouriteCatsResponse
+import com.lbg.project.models.MocksCatsDataModel
+import com.lbg.project.models.toResponseCats
+import com.lbg.project.models.toResponseFavCats
 import com.lbg.project.presentation.contracts.CatContract
 import com.lbg.project.presentation.ui.components.EmptyView
 import com.lbg.project.presentation.ui.features.cats.view.CatScreen
@@ -27,6 +27,7 @@ import com.lbg.project.utils.TestTags
 import com.lbg.project.utils.TestTags.PROGRESS_BAR
 import org.junit.Rule
 import org.junit.Test
+
 
 class CatsScreenKtTest {
     @get:Rule
@@ -80,7 +81,7 @@ class CatsScreenKtTest {
     @Test
     fun testUserViewWithFavCats() {
 
-        val state = toResponseFavCats(MockFavouriteCatsResponse()).data?.let{CatContract.State(favCatsList = it)}
+        val state = toResponseFavCats(MockFavouriteCatsResponse()).data?.let{ CatContract.State(favCatsList = it)}
         val isFavCatsCall = true
         val onNavigationRequested: (String, String) -> Unit = { _, _ -> /* Handle navigation */ }
 

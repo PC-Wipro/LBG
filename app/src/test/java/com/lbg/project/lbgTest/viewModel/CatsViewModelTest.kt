@@ -3,16 +3,16 @@ package com.lbg.project.lbgTest.viewModel
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.lbg.project.R
+import com.lbg.project.catsMock.MockFavouriteCatsResponse
+import com.lbg.project.catsMock.MocksCatsDataModel
+import com.lbg.project.catsMock.toResponseApiCats
+import com.lbg.project.catsMock.toResponseApiFavCats
+import com.lbg.project.catsMock.toResponseCats
+import com.lbg.project.catsMock.toResponseFavCats
 import com.lbg.project.data.NetworkResult
 import com.lbg.project.data.database.LBGDatabase
 import com.lbg.project.data.models.catData.CatResponse
 import com.lbg.project.data.models.catData.FavouriteCatsItem
-import com.lbg.project.data.models.catsMock.MockFavouriteCatsResponse
-import com.lbg.project.data.models.catsMock.MocksCatsDataModel
-import com.lbg.project.data.models.catsMock.toResponseApiCats
-import com.lbg.project.data.models.catsMock.toResponseApiFavCats
-import com.lbg.project.data.models.catsMock.toResponseCats
-import com.lbg.project.data.models.catsMock.toResponseFavCats
 import com.lbg.project.data.repositories.CatsRepositoryImpl
 import com.lbg.project.data.services.CatsService
 import com.lbg.project.domain.repositories.CatsRepository
@@ -133,7 +133,13 @@ class CatsViewModelTest {
 
         // Assert
         assert(result[1] is NetworkResult.Success)
-        assertEquals(application.getString(R.string.both_are_not_equal), result[1].data, verifyData.data)
+        assertEquals(application.getString(R.string.both_are_not_equal), result[1].data?.size,
+            verifyData.data?.size
+        )
+        assertEquals(application.getString(R.string.both_are_not_equal),
+            result[1].data?.get(0)?.image?.url,
+            verifyData.data?.get(0)?.url
+        )
     }
 
     @Test

@@ -58,7 +58,7 @@ class CatsViewModel(
                     }
 
                     is NetworkResult.Loading -> {
-                        if (!state.value.isLoading) {
+                        if (!state?.value?.isLoading!!) {
                             val newState = state.value.copy(isLoading = true)
                             updateState(newState)
                         }
