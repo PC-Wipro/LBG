@@ -7,11 +7,14 @@ import com.lbg.project.catsMock.toRequestPostFavCatData
 import com.lbg.project.catsMock.toResponsePostSuccess
 import com.lbg.project.data.database.LBGDatabase
 import com.lbg.project.data.models.SuccessResponse
-import com.lbg.project.data.repositories.CatsRepositoryImpl
+import com.lbg.project.data.repositories.CatDetailsRepositoryImpl
 import com.lbg.project.data.services.CatsService
-import com.lbg.project.domain.usecase.GetCatsUseCase
-import com.lbg.project.domain.usecase.GetFavCatsUseCase
-import com.lbg.project.presentation.ui.features.cats.viewModel.CatsViewModel
+import com.lbg.project.data.services.catsDetail.CatDetailsApiServiceHelperImpl
+import com.lbg.project.data.services.catsDetail.CatsDetailsDatabaseHelperImpl
+import com.lbg.project.domain.usecase.catsDetail.CheckFavouriteUseCaseImpl
+import com.lbg.project.domain.usecase.catsDetail.DeleteFavCatUseCaseImpl
+import com.lbg.project.domain.usecase.catsDetail.PostFavCatUseCaseImpl
+import com.lbg.project.presentation.ui.features.catDetails.viewModel.CatsDetailsViewModel
 import com.lbg.project.utils.TestTags
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,7 +39,7 @@ import retrofit2.Response
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class CatsDetailsViewModelTest {
-    private lateinit var mViewModel: CatsViewModel
+    private lateinit var mViewModel: CatsDetailsViewModel
 
     @get:Rule
     val testInstantTaskExecuterRules: TestRule = InstantTaskExecutorRule()
@@ -51,12 +54,15 @@ class CatsDetailsViewModelTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         val databaseReference = mock(LBGDatabase::class.java)
-        val mCatsRepo = CatsRepositoryImpl(catService, databaseReference)
+        val apiHelper= CatDetailsApiServiceHelperImpl(catService)
+        val dbHelper= CatsDetailsDatabaseHelperImpl(databaseReference)
+        val mCatsRepo = CatDetailsRepositoryImpl(apiHelper, dbHelper)
         Dispatchers.setMain(testDispatcher)
-        val catUseCase = GetCatsUseCase(mCatsRepo)
-        val favCatUseCase = GetFavCatsUseCase(mCatsRepo)
+        val postCatUseCase = PostFavCatUseCaseImpl(mCatsRepo)
+        val deleteFavCatUseCase = DeleteFavCatUseCaseImpl(mCatsRepo)
+        val checkFavCatUseCase = CheckFavouriteUseCaseImpl(mCatsRepo)
 
-        mViewModel = CatsViewModel(catUseCase, favCatUseCase)
+        mViewModel = CatsDetailsViewModel(postCatUseCase, deleteFavCatUseCase,checkFavCatUseCase)
 
     }
 

@@ -15,9 +15,11 @@ import com.lbg.project.data.models.catData.CatResponse
 import com.lbg.project.data.models.catData.FavouriteCatsItem
 import com.lbg.project.data.repositories.CatsRepositoryImpl
 import com.lbg.project.data.services.CatsService
+import com.lbg.project.data.services.cats.CatApiServiceHelperImpl
+import com.lbg.project.data.services.cats.CatsDatabaseHelperImpl
 import com.lbg.project.domain.repositories.CatsRepository
-import com.lbg.project.domain.usecase.GetCatsUseCase
-import com.lbg.project.domain.usecase.GetFavCatsUseCase
+import com.lbg.project.domain.usecase.cats.GetCatsUseCaseImpl
+import com.lbg.project.domain.usecase.cats.GetFavCatsUseCaseImpl
 import com.lbg.project.presentation.ui.features.cats.viewModel.CatsViewModel
 import com.lbg.project.utils.Constants
 import com.lbg.project.utils.TestTags
@@ -70,10 +72,12 @@ class CatsViewModelTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         val databaseReference = mock(LBGDatabase::class.java)
-         mCatsRepo = CatsRepositoryImpl(catService, databaseReference)
+        val apiHelper= CatApiServiceHelperImpl(catService)
+        val dbHelper= CatsDatabaseHelperImpl(databaseReference)
+         mCatsRepo = CatsRepositoryImpl(apiHelper, dbHelper)
         Dispatchers.setMain(testDispatcher)
-        val catUseCase = GetCatsUseCase(mCatsRepo)
-        val favCatUseCase = GetFavCatsUseCase(mCatsRepo)
+        val catUseCase = GetCatsUseCaseImpl(mCatsRepo)
+        val favCatUseCase = GetFavCatsUseCaseImpl(mCatsRepo)
 
         mViewModel = CatsViewModel(catUseCase, favCatUseCase)
     }

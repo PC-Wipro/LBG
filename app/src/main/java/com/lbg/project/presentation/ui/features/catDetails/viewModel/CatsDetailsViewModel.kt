@@ -6,9 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lbg.project.data.NetworkResult
-import com.lbg.project.domain.usecase.CheckFavouriteUseCase
-import com.lbg.project.domain.usecase.DeleteFavCatUseCase
-import com.lbg.project.domain.usecase.PostFavCatUseCase
+import com.lbg.project.domain.usecase.catsDetail.CheckFavUseCase
+import com.lbg.project.domain.usecase.catsDetail.DeleteFavCatUseCase
+import com.lbg.project.domain.usecase.catsDetail.PostFavCatUseCase
 import com.lbg.project.presentation.contracts.BaseContract
 import com.lbg.project.presentation.contracts.CatDetailsContract
 import com.lbg.project.utils.ErrorsMessage
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class CatsDetailsViewModel(
     private val postFavCatUseCase: PostFavCatUseCase,
     private val deleteFavCatUseCase: DeleteFavCatUseCase,
-    private val checkFavouriteUseCase: CheckFavouriteUseCase,
+    private val checkFavouriteUseCase: CheckFavUseCase,
 ) : ViewModel() {
 
     var state by mutableStateOf(
@@ -59,8 +59,6 @@ class CatsDetailsViewModel(
 
 
     }
-
-
     fun postFavCatData() {
         viewModelScope.launch(Dispatchers.IO) {
             postFavCatUseCase.execute(imageId).collect {

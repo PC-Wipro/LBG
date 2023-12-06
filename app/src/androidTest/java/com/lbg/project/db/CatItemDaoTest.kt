@@ -8,14 +8,12 @@ import androidx.test.filters.SmallTest
 import com.lbg.project.data.database.LBGDatabase
 import com.lbg.project.data.database.dao.FavouriteDao
 import com.lbg.project.data.database.entities.FavImageEntity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class CatItemDaoTest {

@@ -3,8 +3,8 @@ package com.lbg.project.presentation.ui.features.cats.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lbg.project.data.NetworkResult
-import com.lbg.project.domain.usecase.GetCatsUseCase
-import com.lbg.project.domain.usecase.GetFavCatsUseCase
+import com.lbg.project.domain.usecase.cats.GetCatsUseCase
+import com.lbg.project.domain.usecase.cats.GetFavCatsUseCase
 import com.lbg.project.presentation.contracts.BaseContract
 import com.lbg.project.presentation.contracts.CatContract
 import com.lbg.project.utils.ErrorsMessage

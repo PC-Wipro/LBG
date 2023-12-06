@@ -1,71 +1,59 @@
 package com.lbg.project.data.repositories
 
 import com.lbg.project.data.NetworkResult
-import com.lbg.project.data.database.LBGDatabase
-import com.lbg.project.data.database.entities.FavImageEntity
 import com.lbg.project.data.models.catData.CatResponse
 import com.lbg.project.data.models.catData.FavouriteCatsItem
-import com.lbg.project.data.services.CatsService
+import com.lbg.project.data.services.cats.CatApiServiceHelper
+import com.lbg.project.data.services.cats.CatsDatabaseHelper
 import com.lbg.project.domain.repositories.CatsRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
-class CatsRepositoryImpl(private val catsService: CatsService, private val db: LBGDatabase) :
-    CatsRepository {
+class CatsRepositoryImpl(
+    private val catsApiService: CatApiServiceHelper,
+    private val catsDatabaseHelper: CatsDatabaseHelper
+) : CatsRepository {
     override suspend fun fetchCats(limit: Int) = flow<NetworkResult<List<CatResponse>>> {
         emit(NetworkResult.Loading())
-        with(catsService.fetchCatsImages(limit)) {
+        with(catsApiService.fetchCatsImages(limit)) {
             if (isSuccessful) {
                 emit(NetworkResult.Success(this.body()))
             } else {
                 emit(NetworkResult.Error(this.errorBody().toString()))
             }
         }
-    }.flowOn(Dispatchers.IO)
-        .catch {
-            emit(NetworkResult.Error(it.localizedMessage))
-        }
+    }.catch {
+        emit(NetworkResult.Error(it.localizedMessage))
+    }
 
     override suspend fun fetchFavouriteCats(subId: String) =
         flow<NetworkResult<List<FavouriteCatsItem>>> {
             emit(NetworkResult.Loading())
-            with(catsService.fetchFavouriteCats(subId)) {
+            with(catsApiService.fetchFavouriteCats(subId)) {
                 if (isSuccessful) {
-                    val storeInfo = this.body()?.map {
-                        FavImageEntity(
-                            favouriteId = it.id,
-                            imageId = it.imageId
-                        )
-                    }
-                    if (storeInfo != null) {
-                        db.favImageDao().insertFavCatImageRelation(storeInfo)
-                    }
                     emit(NetworkResult.Success(this.body()))
+                    this.body()?.let { catsDatabaseHelper.insertFavCatImageRelation(it) }
                 } else {
                     emit(NetworkResult.Error(this.errorBody().toString()))
                 }
             }
-        }.flowOn(Dispatchers.IO)
-            .catch {
-                emit(NetworkResult.Error(it.localizedMessage))
-            }
+        }.catch {
+            emit(NetworkResult.Error(it.localizedMessage))
+        }
 
-    override suspend fun fetchTestFavouriteCats(subId: String)=
+    override suspend fun fetchTestFavouriteCats(subId: String) =
         flow<NetworkResult<List<FavouriteCatsItem>>> {
             emit(NetworkResult.Loading())
-            with(catsService.fetchFavouriteCats(subId)) {
+            with(catsApiService.fetchFavouriteCats(subId)) {
                 if (isSuccessful) {
                     emit(NetworkResult.Success(this.body()))
                 } else {
                     emit(NetworkResult.Error(this.errorBody().toString()))
                 }
             }
-        }.flowOn(Dispatchers.IO)
-            .catch {
-                emit(NetworkResult.Error(it.localizedMessage))
-            }
+        }.catch {
+            emit(NetworkResult.Error(it.localizedMessage))
+        }
 
 
 }

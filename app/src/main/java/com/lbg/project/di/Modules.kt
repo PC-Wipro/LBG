@@ -8,20 +8,32 @@ import com.lbg.project.data.database.LBGDatabase
 import com.lbg.project.data.repositories.CatDetailsRepositoryImpl
 import com.lbg.project.data.repositories.CatsRepositoryImpl
 import com.lbg.project.data.services.CatsService
+import com.lbg.project.data.services.cats.CatApiServiceHelper
+import com.lbg.project.data.services.cats.CatApiServiceHelperImpl
+import com.lbg.project.data.services.cats.CatsDatabaseHelper
+import com.lbg.project.data.services.cats.CatsDatabaseHelperImpl
+import com.lbg.project.data.services.catsDetail.CatDetailsApiServiceHelper
+import com.lbg.project.data.services.catsDetail.CatDetailsApiServiceHelperImpl
+import com.lbg.project.data.services.catsDetail.CatsDetailsDatabaseHelper
+import com.lbg.project.data.services.catsDetail.CatsDetailsDatabaseHelperImpl
 import com.lbg.project.domain.repositories.CatDetailsRepository
 import com.lbg.project.domain.repositories.CatsRepository
-import com.lbg.project.domain.usecase.CheckFavouriteUseCase
-import com.lbg.project.domain.usecase.DeleteFavCatUseCase
-import com.lbg.project.domain.usecase.GetCatsUseCase
-import com.lbg.project.domain.usecase.GetFavCatsUseCase
-import com.lbg.project.domain.usecase.PostFavCatUseCase
+import com.lbg.project.domain.usecase.cats.GetCatsUseCase
+import com.lbg.project.domain.usecase.cats.GetCatsUseCaseImpl
+import com.lbg.project.domain.usecase.cats.GetFavCatsUseCase
+import com.lbg.project.domain.usecase.cats.GetFavCatsUseCaseImpl
+import com.lbg.project.domain.usecase.catsDetail.CheckFavUseCase
+import com.lbg.project.domain.usecase.catsDetail.CheckFavouriteUseCaseImpl
+import com.lbg.project.domain.usecase.catsDetail.DeleteFavCatUseCase
+import com.lbg.project.domain.usecase.catsDetail.DeleteFavCatUseCaseImpl
+import com.lbg.project.domain.usecase.catsDetail.PostFavCatUseCase
+import com.lbg.project.domain.usecase.catsDetail.PostFavCatUseCaseImpl
 import com.lbg.project.network.interceptor.HeaderInterceptor
 import com.lbg.project.network.interceptor.NetworkConnectionInterceptor
 import com.lbg.project.presentation.ui.features.catDetails.viewModel.CatsDetailsViewModel
 import com.lbg.project.presentation.ui.features.cats.viewModel.CatsViewModel
 import com.lbg.project.utils.Constants
 import com.pddstudio.preferences.encrypted.EncryptedPreferences
-import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,7 +55,7 @@ private val gsonModule = module {
 
 private fun getSharedPreferences(androidApplication: Application): SharedPreferences =
     androidApplication.getSharedPreferences(
-        Constants.MY_RAIN_SHARED_PREFERENCES, Context.MODE_PRIVATE
+        Constants.LBG_SHARED_PREFERENCES, Context.MODE_PRIVATE
     )
 
 private val persistence = module {
@@ -62,17 +74,24 @@ private val viewModelModule = module {
     viewModel { CatsDetailsViewModel(get(),get(),get()) }
 
 }
+private val serviceHelperModule = module {
+    factory<CatApiServiceHelper> { CatApiServiceHelperImpl(get()) }
+    factory<CatsDatabaseHelper> { CatsDatabaseHelperImpl(get()) }
+    factory<CatDetailsApiServiceHelper> { CatDetailsApiServiceHelperImpl(get()) }
+    factory<CatsDetailsDatabaseHelper> { CatsDetailsDatabaseHelperImpl(get()) }
+}
+
 private val repoModule = module {
     single<CatsRepository> { CatsRepositoryImpl(get(),get()) }
     single<CatDetailsRepository> { CatDetailsRepositoryImpl(get(),get()) }
 
 }
 private val useCaseModule = module {
-    single { GetCatsUseCase(get()) }
-    single { GetFavCatsUseCase(get()) }
-    single { PostFavCatUseCase(get()) }
-    single { CheckFavouriteUseCase(get()) }
-    single { DeleteFavCatUseCase(get()) }
+    factory<GetCatsUseCase> { GetCatsUseCaseImpl(get()) }
+    factory<GetFavCatsUseCase> { GetFavCatsUseCaseImpl(get()) }
+    factory<PostFavCatUseCase> { PostFavCatUseCaseImpl(get()) }
+    factory<CheckFavUseCase> { CheckFavouriteUseCaseImpl(get()) }
+    factory<DeleteFavCatUseCase> { DeleteFavCatUseCaseImpl(get()) }
 }
 
 const val url = "CatUrl"
@@ -89,18 +108,13 @@ private val serviceModule = module {
     single { get<Retrofit>(named(url)).create(CatsService::class.java) }
 }
 
-private val dispatchModule = module {
-    single(named("io")) { Dispatchers.IO }
-    single(named("main")) { Dispatchers.Main }
-    single(named("default")) { Dispatchers.Default }
-}
 
 private val databaseModule = module {
     single { LBGDatabase.getInstance(androidContext()) }
     single { get<LBGDatabase>().favImageDao() }
 }
 
-val nullOnEmptyConverterFactory = object : Converter.Factory() {
+val nullOnEmptyConverterFactory = object : Converter.Factory() {//convert value if not empty else return null
     fun converterFactory() = this
     override fun responseBodyConverter(
         type: Type, annotations: Array<out Annotation>, retrofit: Retrofit
@@ -133,9 +147,9 @@ private fun provideOkHttpClient(context: Context): OkHttpClient {
 val allModules = listOf(
     viewModelModule,
     persistence,
-    dispatchModule,
     gsonModule,
     serviceModule,
+    serviceHelperModule,
     repoModule,
     useCaseModule,
     databaseModule
