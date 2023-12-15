@@ -194,15 +194,18 @@ Mockito is used for unit testing the API and network-related components. It allo
   - First, make sure you have Android ```(Android Studio Giraffe | 2022.3.1 Patch 2)```  version installed
   - Android Studio's Gradle JDK version should be Java 17.0.6.
     
-### Commits Includes
-#### Commit 03526cafbe0ffcbe4df87f9c91d0c3512c8bac71
+## Commits Includes
+> [!IMPORTANT]  
+>#### [Commit 03526cafbe0ffcbe4df87f9c91d0c3512c8bac71](https://github.com/PC-Wipro/LBG/commit/03526cafbe0ffcbe4df87f9c91d0c3512c8bac71)
+
 This commit introduces the following major changes:
 
 **Dependency Injection (DI) Implementation:** The commit includes the implementation of Dependency Injection. This architectural pattern is essential for providing objects with their dependencies, improving code modularity and testability.
 
 **Basic MVVM Project Architecture:** The commit lays the foundation for the MVVM (Model-View-ViewModel) architecture. This separation of concerns is crucial for building maintainable and scalable applications.
 
-#### Commit c66c4dae69ba5fbc18bf793ff11b5b54e6cc504d
+> [!IMPORTANT]  
+>#### [Commit c66c4dae69ba5fbc18bf793ff11b5b54e6cc504d](https://github.com/PC-Wipro/LBG/commit/c66c4dae69ba5fbc18bf793ff11b5b54e6cc504d)
 This commit encompasses significant improvements and features, including:
 
 **MVVM Clean Architecture:** The project now adheres to the MVVM Clean Architecture. This architectural style emphasizes the separation of data, domain logic, and presentation concerns, resulting in code that is clean and maintainable.
@@ -215,7 +218,8 @@ This commit encompasses significant improvements and features, including:
 
 **SOLID Principles and Kotlin Components:** The code adheres to the SOLID principles, ensuring that the code base is structured with a focus on Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion principles. Additionally, Kotlin-specific components and functions are leveraged for efficient and expressive code.
 
-#### commit 4ed608578f7475396c10c9fce795da047b51e61f
+> [!IMPORTANT]  
+>#### [commit 4ed608578f7475396c10c9fce795da047b51e61f](https://github.com/PC-Wipro/LBG/commit/4ed608578f7475396c10c9fce795da047b51e61f)
 **Enhanced Flow Handling:** Improvements in flow handling make the application more responsive and efficient in handling asynchronous data changes in the data layer.
 
 **changes Koin UseCase module**  Koin Use Case Module Update
@@ -242,8 +246,9 @@ To ensure compliance with these conditions:
  factory<GetCatsUseCase> { GetCatsUseCaseImpl(get()) }
 ``` 
 While these aspects play a crucial role in scaling an application, there's an opportunity to further enhance scalability by explicitly defining the scope of the module. This can be achieved through the use of scoped definitions, where an object is created with persistence tied to the associated scope's lifetime. This approach ensures a more granular and controlled management of dependencies, contributing to the overall scalability and maintainability of the application.
+> [!TIP]
+> scope<A> { } is equivalent to scope(named<A>()){ } , but more convenient to write.You can also use a string qualifier like: scope(named("SCOPE_NAME")) { }
 ```
-scope<A> { } is equivalent to scope(named<A>()){ } , but more convenient to write.You can also use a string qualifier like: scope(named("SCOPE_NAME")) { }
 1. using string name of scope
 scope(named("myScope")) {
         // Define dependencies specific to this scope
