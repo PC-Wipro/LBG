@@ -9,16 +9,18 @@ import com.lbg.project.catsMock.toResponseApiCats
 import com.lbg.project.catsMock.toResponseApiFavCats
 import com.lbg.project.catsMock.toResponseCats
 import com.lbg.project.catsMock.toResponseFavCats
-import com.lbg.project.data.network.NetworkResult
 import com.lbg.project.data.database.LBGDatabase
 import com.lbg.project.data.models.catData.CatResponse
 import com.lbg.project.data.models.catData.FavouriteCatsItem
+import com.lbg.project.data.network.NetworkResult
 import com.lbg.project.data.repositories.CatsRepositoryImpl
 import com.lbg.project.data.services.CatsService
 import com.lbg.project.data.services.cats.CatApiServiceHelperImpl
 import com.lbg.project.data.services.cats.CatsDatabaseHelperImpl
 import com.lbg.project.domain.repositories.CatsRepository
+import com.lbg.project.domain.usecase.cats.GetCatsUseCase
 import com.lbg.project.domain.usecase.cats.GetCatsUseCaseImpl
+import com.lbg.project.domain.usecase.cats.GetFavCatsUseCase
 import com.lbg.project.domain.usecase.cats.GetFavCatsUseCaseImpl
 import com.lbg.project.presentation.ui.features.cats.viewModel.CatsViewModel
 import com.lbg.project.utils.Constants
@@ -53,10 +55,10 @@ import kotlin.test.junit.JUnitAsserter.assertEquals
 @RunWith(MockitoJUnitRunner::class)
 class CatsViewModelTest {
     private lateinit var mCatsRepo: CatsRepository
+    private lateinit var mCatUseCase: GetCatsUseCase
+    private lateinit var mFavCatUseCase: GetFavCatsUseCase
     private val application: Application = mock()
     private lateinit var mViewModel: CatsViewModel
-
-
 
 
     @get:Rule
@@ -72,14 +74,14 @@ class CatsViewModelTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         val databaseReference = mock(LBGDatabase::class.java)
-        val apiHelper= CatApiServiceHelperImpl(catService)
-        val dbHelper= CatsDatabaseHelperImpl(databaseReference)
-         mCatsRepo = CatsRepositoryImpl(apiHelper, dbHelper)
+        val apiHelper = CatApiServiceHelperImpl(catService)
+        val dbHelper = CatsDatabaseHelperImpl(databaseReference)
+        mCatsRepo = CatsRepositoryImpl(apiHelper, dbHelper)
         Dispatchers.setMain(testDispatcher)
-        val catUseCase = GetCatsUseCaseImpl(mCatsRepo)
-        val favCatUseCase = GetFavCatsUseCaseImpl(mCatsRepo)
+        mCatUseCase = GetCatsUseCaseImpl(mCatsRepo)
+        mFavCatUseCase = GetFavCatsUseCaseImpl(mCatsRepo)
 
-        mViewModel = CatsViewModel(catUseCase, favCatUseCase)
+        mViewModel = CatsViewModel(mCatUseCase, mFavCatUseCase)
     }
 
     @Test
@@ -137,10 +139,13 @@ class CatsViewModelTest {
 
         // Assert
         assert(result[1] is NetworkResult.Success)
-        assertEquals(application.getString(R.string.both_are_not_equal), result[1].data?.size,
+        assertEquals(
+            application.getString(R.string.both_are_not_equal),
+            result[1].data?.size,
             verifyData.data?.size
         )
-        assertEquals(application.getString(R.string.both_are_not_equal),
+        assertEquals(
+            application.getString(R.string.both_are_not_equal),
             result[1].data?.get(0)?.image?.url,
             verifyData.data?.get(0)?.url
         )
@@ -150,13 +155,14 @@ class CatsViewModelTest {
     fun testFetchFavouriteCatsErrorState() = runTest(UnconfinedTestDispatcher()) {
 
         // Define a sample error response for the service
-        val errorResponse = Response.error<List<FavouriteCatsItem>>(400, "Error message".toResponseBody(
-            "application/json".toMediaType()
-        ))
+        val errorResponse = Response.error<List<FavouriteCatsItem>>(
+            400, "Error message".toResponseBody(
+                "application/json".toMediaType()
+            )
+        )
         // Set up the mock to return the error response
         `when`(catService.fetchFavouriteCats(TestTags.SUB_ID)).thenReturn(errorResponse)
-        val result = mCatsRepo.fetchFavouriteCats(TestTags.SUB_ID).toList()
-        verify(catService).fetchFavouriteCats(TestTags.SUB_ID)
+        val result = mFavCatUseCase.execute().toList()
         assert(result[1] is NetworkResult.Error)
     }
 
@@ -166,10 +172,7 @@ class CatsViewModelTest {
         // Set up the mock to throw an exception
         `when`(catService.fetchFavouriteCats(TestTags.SUB_ID)).thenThrow(RuntimeException("An error occurred"))
 
-        val result = mCatsRepo.fetchFavouriteCats(TestTags.SUB_ID).toList()
-
-        verify(catService).fetchFavouriteCats(TestTags.SUB_ID)
-
+        val result = mFavCatUseCase.execute().toList()
         assert(result[1] is NetworkResult.Error)
     }
 
