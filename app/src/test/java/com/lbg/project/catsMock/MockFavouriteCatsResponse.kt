@@ -1,7 +1,7 @@
 package com.lbg.project.catsMock
 
 import com.google.gson.annotations.SerializedName
-import com.lbg.project.data.NetworkResult
+import com.lbg.project.data.network.NetworkResult
 import com.lbg.project.data.models.catData.FavouriteCatsItem
 import com.lbg.project.data.models.catData.Image
 import com.lbg.project.domain.mappers.CatDataModel

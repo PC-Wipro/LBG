@@ -28,8 +28,8 @@ import com.lbg.project.domain.usecase.catsDetail.DeleteFavCatUseCase
 import com.lbg.project.domain.usecase.catsDetail.DeleteFavCatUseCaseImpl
 import com.lbg.project.domain.usecase.catsDetail.PostFavCatUseCase
 import com.lbg.project.domain.usecase.catsDetail.PostFavCatUseCaseImpl
-import com.lbg.project.network.interceptor.HeaderInterceptor
-import com.lbg.project.network.interceptor.NetworkConnectionInterceptor
+import com.lbg.project.data.network.interceptor.HeaderInterceptor
+import com.lbg.project.data.network.interceptor.NetworkConnectionInterceptor
 import com.lbg.project.presentation.ui.features.catDetails.viewModel.CatsDetailsViewModel
 import com.lbg.project.presentation.ui.features.cats.viewModel.CatsViewModel
 import com.lbg.project.utils.Constants

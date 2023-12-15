@@ -1,4 +1,4 @@
-package com.lbg.project.network
+package com.lbg.project.data.network
 
 sealed class NetworkStatus {
     /** Device has a valid internet connection */

@@ -1,4 +1,4 @@
-package com.lbg.project.data
+package com.lbg.project.data.network
 
 sealed class NetworkResult<T>(val data: T? = null, val message: String? = null) {
 

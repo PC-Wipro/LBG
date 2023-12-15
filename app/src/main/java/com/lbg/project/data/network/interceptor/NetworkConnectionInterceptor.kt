@@ -1,11 +1,11 @@
-package com.lbg.project.network.interceptor
+package com.lbg.project.data.network.interceptor
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
 import com.lbg.project.R
-import com.lbg.project.network.NetworkStatus
+import com.lbg.project.data.network.NetworkStatus
 import okhttp3.Interceptor
 import okhttp3.Response
 import okio.IOException

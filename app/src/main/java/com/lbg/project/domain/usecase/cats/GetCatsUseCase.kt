@@ -1,6 +1,6 @@
 package com.lbg.project.domain.usecase.cats
 
-import com.lbg.project.data.NetworkResult
+import com.lbg.project.data.network.NetworkResult
 import com.lbg.project.domain.mappers.CatDataModel
 import kotlinx.coroutines.flow.Flow
 

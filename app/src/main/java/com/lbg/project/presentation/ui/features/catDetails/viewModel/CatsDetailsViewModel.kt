@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lbg.project.data.NetworkResult
+import com.lbg.project.data.network.NetworkResult
 import com.lbg.project.domain.usecase.catsDetail.CheckFavUseCase
 import com.lbg.project.domain.usecase.catsDetail.DeleteFavCatUseCase
 import com.lbg.project.domain.usecase.catsDetail.PostFavCatUseCase

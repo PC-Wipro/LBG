@@ -103,14 +103,14 @@ class CatFullScreenKtTest {
         composeTestRule.onNodeWithTag(TestTags.TOGGLE_FAV_BUTTON, useUnmergedTree = true)
             .performClick()
 
-        // Assert that the callback was invoked and the isFavourite variable was updated
+        // Assert that the callback was invoked and the fetchIsFavouriteRelation variable was updated
         assert(isFavourite)
 
         // Click the FavoriteButton again to toggle it back
         composeTestRule.onNodeWithTag(TestTags.TOGGLE_FAV_BUTTON, useUnmergedTree = true)
             .performClick()
 
-        // Assert that the callback was invoked and the isFavourite variable was updated
+        // Assert that the callback was invoked and the fetchIsFavouriteRelation variable was updated
         assert(!isFavourite)
     }
 }

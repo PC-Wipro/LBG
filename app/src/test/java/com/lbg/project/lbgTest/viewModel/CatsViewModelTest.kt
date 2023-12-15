@@ -9,7 +9,7 @@ import com.lbg.project.catsMock.toResponseApiCats
 import com.lbg.project.catsMock.toResponseApiFavCats
 import com.lbg.project.catsMock.toResponseCats
 import com.lbg.project.catsMock.toResponseFavCats
-import com.lbg.project.data.NetworkResult
+import com.lbg.project.data.network.NetworkResult
 import com.lbg.project.data.database.LBGDatabase
 import com.lbg.project.data.models.catData.CatResponse
 import com.lbg.project.data.models.catData.FavouriteCatsItem

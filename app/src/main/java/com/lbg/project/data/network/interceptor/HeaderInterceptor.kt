@@ -1,4 +1,4 @@
-package com.lbg.project.network.interceptor
+package com.lbg.project.data.network.interceptor
 
 
 import okhttp3.Headers
