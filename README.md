@@ -119,7 +119,7 @@ which making it easier to develop and test.
 ##### *Note*
 In this example, I initially used two activities to display cats to the user and manage adding or deleting cats from the favorite list. However, it's possible to achieve the same functionality within 
 a single activity by implementing a navigation scenario for a fullView Composable, jetpack Navigation, you can follow these steps:
-1. Set Up Jetpack Navigation:
+1. Set Up Jetpack Navigation:[FOR REFERENCE PLEASE CHECK](https://github.com/PC-Wipro/LBG-SingleActivity) 
 ```kotlin 
  object Route {
         const val CAT_FULL_View = "Cat_Image_AS_Sized/{CatUrl}/{imageId}"
